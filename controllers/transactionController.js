@@ -27,3 +27,16 @@ export const addTransaction = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+export const getUserTransactions = async (req, res) => {
+  try {
+    const transactions = await Transaction.find({
+      userId: req.user._id
+    }).sort({ date: -1 });
+
+    res.status(200).json(transactions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
