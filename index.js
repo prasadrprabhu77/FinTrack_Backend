@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
+import transactionRouter from "./routes/transactionRoutes.js";
 
 dotenv.config();
 connectDB()
@@ -20,6 +21,9 @@ app.get("/", (req, res) => {
 
 // auth routes 
 app.use("/api/auth", authRouter)
+
+//Transaction Routes
+app.use("/api/transaction", transactionRouter)
 
 const PORT = process.env.PORT || 8000;
 
