@@ -40,3 +40,25 @@ export const getUserTransactions = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+export const deleteTransaction = async (req, res) => {
+  try {
+    const transaction = await Transaction.findById(req.params.id);
+
+    if (!transaction) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+
+    // check ownership
+    if (transaction.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Not authorized to delete this transaction" });
+    }
+
+    await transaction.deleteOne();
+
+    res.status(200).json({ message: "Transaction deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
