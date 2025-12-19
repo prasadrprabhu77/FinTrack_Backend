@@ -91,3 +91,32 @@ export const getDashboardSummary = async (req, res) => {
   }
 };
 
+export const getCategoryWiseExpense = async (req, res) => {
+  try {
+    const data = await Transaction.aggregate([
+      {
+        $match: {
+          userId: req.user._id,
+          type: "expense"
+        }
+      },
+      {
+        $group: {
+          _id: "$category",
+          total: { $sum: "$amount" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          total: 1
+        }
+      }
+    ]);
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
