@@ -62,3 +62,32 @@ export const deleteTransaction = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+export const getDashboardSummary = async (req, res) => {
+  try {
+    const transactions = await Transaction.find({
+      userId: req.user._id
+    });
+
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+    transactions.forEach((tx) => {
+      if (tx.type === "income") {
+        totalIncome += tx.amount;
+      } else if (tx.type === "expense") {
+        totalExpense += tx.amount;
+      }
+    });
+
+    res.status(200).json({
+      totalIncome,
+      totalExpense,
+      balance: totalIncome - totalExpense
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
