@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
 import transactionRouter from "./routes/transactionRoutes.js";
+import budgetRouter from "./routes/budgetRoutes.js";
 
 dotenv.config();
 connectDB()
@@ -24,6 +25,9 @@ app.use("/api/auth", authRouter)
 
 //Transaction Routes
 app.use("/api/transaction", transactionRouter)
+
+// Budget Routes
+app.use("/api/budget", budgetRouter );
 
 const PORT = process.env.PORT || 8000;
 
