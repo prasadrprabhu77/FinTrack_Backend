@@ -35,3 +35,28 @@ export const setBudget = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getCurrentMonthBudget = async (req, res) => {
+  try {
+    const now = new Date();
+    const month = now.getMonth() + 1; // JS months are 0-based
+    const year = now.getFullYear();
+
+    const budget = await Budget.findOne({
+      userId: req.user._id,
+      month,
+      year
+    });
+
+    if (!budget) {
+      return res.status(200).json({
+        message: "No budget set for this month",
+        budget: null
+      });
+    }
+
+    res.status(200).json({ budget });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
