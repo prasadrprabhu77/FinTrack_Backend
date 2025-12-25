@@ -31,7 +31,7 @@ export const addTransaction = async (req, res) => {
 
 export const getUserTransactions = async (req, res) => {
   try {
-    const { startDate, endDate, category } = req.query;
+    const { startDate, endDate, category, type } = req.query;
 
     const filter = {
       userId: req.user._id
@@ -48,6 +48,11 @@ export const getUserTransactions = async (req, res) => {
     // category filter
     if (category) {
       filter.category = category;
+    }
+
+    //type filter
+    if (type) {
+      filter.type = type;
     }
 
     const transactions = await Transaction.find(filter).sort({ date: -1 });
