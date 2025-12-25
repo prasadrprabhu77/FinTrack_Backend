@@ -31,17 +31,23 @@ export const addTransaction = async (req, res) => {
 
 export const getUserTransactions = async (req, res) => {
   try {
-    const { startDate, endDate } = req.query;
+    const { startDate, endDate, category } = req.query;
 
     const filter = {
       userId: req.user._id
     };
 
+    // date range filter
     if (startDate && endDate) {
       filter.date = {
         $gte: new Date(startDate),
         $lte: new Date(endDate)
       };
+    }
+
+    // category filter
+    if (category) {
+      filter.category = category;
     }
 
     const transactions = await Transaction.find(filter).sort({ date: -1 });
@@ -51,6 +57,7 @@ export const getUserTransactions = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 
