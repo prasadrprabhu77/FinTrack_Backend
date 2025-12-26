@@ -144,3 +144,35 @@ export const getCategoryWiseExpense = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const updateTransaction = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const transaction = await Transaction.findById(id);
+    if (!transaction) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+
+    // ownership check
+    if (transaction.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Not authorized to update this transaction" });
+    }
+
+    const allowedUpdates = ["type", "amount", "category", "note", "wallet", "date"];
+    allowedUpdates.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        transaction[field] = req.body[field];
+      }
+    });
+
+    const updatedTransaction = await transaction.save();
+
+    res.status(200).json({
+      message: "Transaction updated successfully",
+      transaction: updatedTransaction
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
