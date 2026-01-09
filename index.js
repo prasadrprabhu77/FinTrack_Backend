@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRouter)
 
 //Transaction Routes
-app.use("/api/transaction", transactionRouter)
+app.use("/api/transactions", transactionRouter)
 
 // Budget Routes
 app.use("/api/budget", budgetRouter );
